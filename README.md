@@ -1,3 +1,3 @@
 # blog-backend
 
-portoflio project - backend of a blog site
+portfolio project - backend of a blog site
