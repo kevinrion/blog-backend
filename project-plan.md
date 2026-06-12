@@ -10,10 +10,10 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
 
 **Objective:** Establish the repository, strict guardrails, and local development environment.
 
-- [ ] **Repository Setup:** Initialize Git and immediately commit a strict `.gitignore` covering `node_modules`, `.env`, `dist`, build artifacts, and system logs.
-- [ ] **Scaffolding:** Bootstrap the project using the NestJS CLI (`nest new blog-backend`).
-- [ ] **Node Version Pin:** Add `.nvmrc` and/or `engines` in `package.json` so all developers and CI use the same Node version.
-- [ ] **Strict Quality Gates:**
+- [*] **Repository Setup:** Initialize Git and immediately commit a strict `.gitignore` covering `node_modules`, `.env`, `dist`, build artifacts, and system logs.
+- [*] **Scaffolding:** Bootstrap the project using the NestJS CLI (`nest new blog-backend`).
+- [*] **Node Version Pin:** Add `.nvmrc` and/or `engines` in `package.json` so all developers and CI use the same Node version.
+- [*] **Strict Quality Gates:**
   - Configure `tsconfig.json` with `"strict": true` and `"noImplicitAny": true`.
   - Configure ESLint and Prettier rules.
   - Set up husky and lint-staged to run the linter and formatter on every local commit.
@@ -49,15 +49,16 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
   - `Json` type (`JSONB` in PostgreSQL) for flexible `metadata` columns where appropriate.
   - Core entities (initial scope):
 
-    | Model    | Key fields |
-    |----------|------------|
-    | `User`   | `id`, `email`, `passwordHash`, `role`, `metadata`, `createdAt`, `updatedAt` |
-    | `Post`   | `id`, `title`, `slug`, `content`, `published`, `authorId`, `metadata`, `createdAt`, `updatedAt` |
-    | `Comment`| `id`, `body`, `postId`, `authorId`, `metadata`, `createdAt`, `updatedAt` |
-    | `Tag`    | `id`, `name`, `slug` |
-    | `PostTag`| join table linking `Post` ↔ `Tag` |
+    | Model     | Key fields                                                                                      |
+    | --------- | ----------------------------------------------------------------------------------------------- |
+    | `User`    | `id`, `email`, `passwordHash`, `role`, `metadata`, `createdAt`, `updatedAt`                     |
+    | `Post`    | `id`, `title`, `slug`, `content`, `published`, `authorId`, `metadata`, `createdAt`, `updatedAt` |
+    | `Comment` | `id`, `body`, `postId`, `authorId`, `metadata`, `createdAt`, `updatedAt`                        |
+    | `Tag`     | `id`, `name`, `slug`                                                                            |
+    | `PostTag` | join table linking `Post` ↔ `Tag`                                                               |
 
   - Define relations (`User` → `Post`, `Post` → `Comment`, `Post` ↔ `Tag`) and indexes (`email`, `slug`, `published`).
+
 - [ ] **First Migration:** Run `npx prisma migrate dev --name init` and verify it applies cleanly.
 - [ ] **Seed Script:** Add `prisma/seed.ts` for local dev data (admin user, sample posts, tags). Wire via `package.json` `prisma.seed`.
 - [ ] **Test Database Strategy:** Document separate `DATABASE_URL_TEST` for e2e tests. CI and local e2e runs target the test database, never dev data.
