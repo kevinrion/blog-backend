@@ -18,7 +18,7 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
   - Configure ESLint and Prettier rules.
   - Set up husky and lint-staged to run the linter and formatter on every local commit.
   - (Optional) Add commitlint for conventional commits and cleaner changelogs.
-- [ ] **Secrets Template:** Create a `.env.example` documenting all required variables with dummy values:
+- [*] **Secrets Template:** Create a `.env.example` documenting all required variables with dummy values:
 
   ```env
   DATABASE_URL=postgresql://user:password@localhost:5432/blog_dev
@@ -31,7 +31,7 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
   NODE_ENV=development
   ```
 
-- [ ] **README:** Document local setup: clone, install, `docker compose up`, env copy, migrate, seed, and `npm run start:dev`.
+- [*] **README:** Document local setup: clone, install, `docker compose up`, env copy, migrate, seed, and `npm run start:dev`.
 
 ---
 
