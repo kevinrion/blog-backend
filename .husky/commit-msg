@@ -1,1 +1,11 @@
-npx --no -- commitlint --edit "$1"
+if ! npx --no -- commitlint --edit "$1"; then
+  echo ""
+  echo "Commit message must use Conventional Commits: type: description"
+  echo ""
+  echo "Examples:"
+  echo "  chore: add node pin and quality gates"
+  echo "  feat: bootstrap nestjs application"
+  echo "  fix: resolve lint-staged eslint config"
+  echo ""
+  exit 1
+fi

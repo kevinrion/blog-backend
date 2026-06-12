@@ -57,6 +57,32 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Git commits
+
+[Husky](https://typicode.github.io/husky/) is a tool that wires **git hooks** into this project — small scripts Git runs automatically at certain points (for example, right before a commit is created). That lets the repo enforce checks locally so broken or poorly formatted code is caught before it lands in history, without relying on CI alone.
+
+This repo uses Husky for two hooks:
+
+- **pre-commit** — runs ESLint and Prettier on staged files via lint-staged
+- **commit-msg** — validates the commit message format with [commitlint](https://commitlint.js.org/)
+
+Commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+type: description
+```
+
+Common types include `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, and `ci`.
+
+Examples:
+
+```bash
+git commit -m "chore: add node pin and quality gates"
+git commit -m "feat: bootstrap nestjs application"
+```
+
+Messages without a type prefix (for example, `add quality gates`) will be rejected by the commit-msg hook.
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
