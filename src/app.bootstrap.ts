@@ -5,6 +5,7 @@ import { json, urlencoded, type Express } from 'express';
 import helmet from 'helmet';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { API_CONVENTIONS_DESCRIPTION } from './common/documentation/api-conventions';
 import type { EnvConfig } from './config/env.schema';
 
 const JSON_BODY_LIMIT = '100kb';
@@ -48,7 +49,7 @@ export function configureApp(app: INestApplication): void {
   if (nodeEnv !== 'test') {
     const swaggerConfig = new DocumentBuilder()
       .setTitle('Blog API')
-      .setDescription('HTTP contract for the blog backend')
+      .setDescription(API_CONVENTIONS_DESCRIPTION)
       .setVersion('1.0')
       .addBearerAuth()
       .build();

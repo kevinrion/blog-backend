@@ -40,7 +40,69 @@ npm run start:dev
 
 The API listens on `http://localhost:3000` by default (`PORT` in `.env`).
 
-See [Docker guide](#docker-guide) and [Prisma guide](#prisma-guide) for database details. See [Test database](#test-database) for e2e test setup.
+See [Verify locally](#verify-locally) to confirm the API is working. See [Docker guide](#docker-guide) and [Prisma guide](#prisma-guide) for database details. See [Test database](#test-database) for e2e test setup.
+
+## Verify locally
+
+After `npm run start:dev`, confirm the platform layer and auth module with these checks.
+
+### Health (no auth required)
+
+```bash
+# Liveness — app is running (works without Postgres)
+curl http://localhost:3000/health
+
+# Readiness — app can reach the database (requires Postgres)
+curl http://localhost:3000/ready
+```
+
+Expected: `/health` returns `{"status":"ok"}`. `/ready` returns `{"status":"ok"}` when Postgres is up, or `503` with a JSON error envelope when the database is unreachable.
+
+### Auth
+
+Requires Postgres running (`docker compose up -d`) and migrations applied (`npm run db:migrate`).
+
+```bash
+# Register a new user
+curl -X POST http://localhost:3000/v1/auth/register \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"you@example.com","password":"securepass123"}'
+
+# Login with seeded admin (after npm run db:seed)
+curl -X POST http://localhost:3000/v1/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"admin@example.com","password":"changeme"}'
+
+# Access a protected route (replace TOKEN with accessToken from register/login)
+curl http://localhost:3000/v1/auth/me \
+  -H "Authorization: Bearer TOKEN"
+```
+
+Successful register/login responses use the `{ data: { accessToken, user } }` shape. The `user` object never includes `passwordHash`.
+
+### OpenAPI
+
+With the server running, open the interactive docs or fetch the raw spec:
+
+- Swagger UI: [http://localhost:3000/v1/docs](http://localhost:3000/v1/docs)
+- OpenAPI JSON: [http://localhost:3000/v1/docs-json](http://localhost:3000/v1/docs-json)
+
+The frontend repo can generate types from `/v1/docs-json` (e.g. with `openapi-typescript` or Orval).
+
+### Correlation ID
+
+Every response includes an `X-Request-Id` header. Pass your own to trace a request through logs:
+
+```bash
+curl http://localhost:3000/health -H 'X-Request-Id: my-trace-id' -v
+```
+
+### Automated checks
+
+```bash
+npm test           # unit tests (no Postgres required)
+npm run test:e2e   # e2e tests (requires Postgres + blog_test migrations)
+```
 
 ## Prisma guide
 

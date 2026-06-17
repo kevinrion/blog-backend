@@ -103,12 +103,12 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
 
 **Objective:** Define consistent patterns before feature modules so every endpoint behaves predictably.
 
-- [ ] **Response Shape:** Standardize success wrappers where useful (e.g. `{ data, meta }` for collections).
-- [ ] **Pagination:** Cursor-based or offset pagination for list endpoints. Query params: `page`, `limit` (max cap enforced server-side). Response `meta` includes `total`, `page`, `limit`.
-- [ ] **Sorting & Filtering:** Document supported query params per resource (e.g. `?sort=createdAt:desc&published=true`).
-- [ ] **DTO Mapping:** Map Prisma models to response DTOs manually (or via a thin mapper). Never return `passwordHash` or internal fields.
-- [ ] **Error Codes:** Maintain a small enum of `errorCode` strings (`VALIDATION_FAILED`, `UNAUTHORIZED`, `NOT_FOUND`, etc.) for frontend handling.
-- [ ] **Frontend Integration Contract:** Since repos are separate, the frontend syncs via OpenAPI codegen (`openapi-typescript`, Orval, etc.) against `GET /v1/docs-json`. Optionally commit a generated `openapi.json` on release tags. No shared npm types package unless the team outgrows codegen.
+- [*] **Response Shape:** Standardize success wrappers where useful (e.g. `{ data, meta }` for collections).
+- [*] **Pagination:** Cursor-based or offset pagination for list endpoints. Query params: `page`, `limit` (max cap enforced server-side). Response `meta` includes `total`, `page`, `limit`.
+- [*] **Sorting & Filtering:** Document supported query params per resource (e.g. `?sort=createdAt:desc&published=true`).
+- [*] **DTO Mapping:** Map Prisma models to response DTOs manually (or via a thin mapper). Never return `passwordHash` or internal fields.
+- [*] **Error Codes:** Maintain a small enum of `errorCode` strings (`VALIDATION_FAILED`, `UNAUTHORIZED`, `NOT_FOUND`, etc.) for frontend handling.
+- [*] **Frontend Integration Contract:** Since repos are separate, the frontend syncs via OpenAPI codegen (`openapi-typescript`, Orval, etc.) against `GET /v1/docs-json`. Optionally commit a generated `openapi.json` on release tags. No shared npm types package unless the team outgrows codegen.
 
 ---
 
@@ -116,14 +116,14 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
 
 **Objective:** Implement authentication before content features so guards can be applied from the start.
 
-- [ ] **Password Hashing:** Use bcrypt or argon2. Never store or log plaintext passwords.
-- [ ] **Registration & Login:** `POST /v1/auth/register`, `POST /v1/auth/login`. Return JWT access token (and optionally refresh token).
-- [ ] **JWT Strategy:** `@nestjs/passport` + `passport-jwt`. Validate `JWT_SECRET` and `JWT_EXPIRES_IN` from config.
-- [ ] **Auth Guard:** `JwtAuthGuard` protecting routes that require authentication.
-- [ ] **Roles Guard (optional):** `RolesGuard` for admin-only operations (e.g. publish post, delete any comment).
-- [ ] **Current User Decorator:** `@CurrentUser()` to inject the authenticated user into controllers.
-- [ ] **DTOs:** `RegisterDto`, `LoginDto` with strict validation. Response DTO excludes sensitive fields.
-- [ ] **Tests:** Unit tests for auth service (hashing, token generation). E2e tests for register/login flows.
+- [*] **Password Hashing:** Use bcrypt or argon2. Never store or log plaintext passwords.
+- [*] **Registration & Login:** `POST /v1/auth/register`, `POST /v1/auth/login`. Return JWT access token (and optionally refresh token).
+- [*] **JWT Strategy:** `@nestjs/passport` + `passport-jwt`. Validate `JWT_SECRET` and `JWT_EXPIRES_IN` from config.
+- [*] **Auth Guard:** `JwtAuthGuard` protecting routes that require authentication.
+- [*] **Roles Guard (optional):** `RolesGuard` for admin-only operations (e.g. publish post, delete any comment).
+- [*] **Current User Decorator:** `@CurrentUser()` to inject the authenticated user into controllers.
+- [*] **DTOs:** `RegisterDto`, `LoginDto` with strict validation. Response DTO excludes sensitive fields.
+- [*] **Tests:** Unit tests for auth service (hashing, token generation). E2e tests for register/login flows.
 
 ---
 
