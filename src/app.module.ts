@@ -6,6 +6,10 @@ import { LoggerModule } from 'nestjs-pino';
 import { CORRELATION_ID_KEY } from './common/constants/correlation-id.constant';
 import { validateEnv } from './config/env.schema';
 import { PrismaModule } from './database/prisma.module';
+import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
+import { CommentsModule } from './comments/comments.module';
+import { TagsModule } from './tags/tags.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
 import type { IncomingMessage } from 'node:http';
@@ -50,6 +54,10 @@ import type { IncomingMessage } from 'node:http';
     ]),
     PrismaModule,
     AuthModule,
+    UsersModule,
+    PostsModule,
+    CommentsModule,
+    TagsModule,
     HealthModule,
   ],
   providers: [

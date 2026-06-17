@@ -6,6 +6,8 @@ import type { EnvConfig } from '../config/env.schema';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RolesGuard } from './guards/roles.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from './guards/optional-jwt-auth.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
@@ -22,7 +24,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RolesGuard],
-  exports: [AuthService, JwtModule, RolesGuard],
+  providers: [AuthService, JwtStrategy, RolesGuard, JwtAuthGuard, OptionalJwtAuthGuard],
+  exports: [AuthService, JwtModule, RolesGuard, JwtAuthGuard, OptionalJwtAuthGuard],
 })
 export class AuthModule {}

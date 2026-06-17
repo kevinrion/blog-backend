@@ -74,11 +74,81 @@ curl -X POST http://localhost:3000/v1/auth/login \
   -d '{"email":"admin@example.com","password":"changeme"}'
 
 # Access a protected route (replace TOKEN with accessToken from register/login)
-curl http://localhost:3000/v1/auth/me \
+curl http://localhost:3000/v1/users/me \
   -H "Authorization: Bearer TOKEN"
 ```
 
 Successful register/login responses use the `{ data: { accessToken, user } }` shape. The `user` object never includes `passwordHash`.
+
+### Users
+
+```bash
+# Update your profile metadata
+curl -X PATCH http://localhost:3000/v1/users/me \
+  -H "Authorization: Bearer TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"metadata":{"displayName":"Jane"}}'
+
+# Admin: list all users (requires admin JWT from seed: admin@example.com / changeme)
+curl http://localhost:3000/v1/users \
+  -H "Authorization: Bearer ADMIN_TOKEN"
+
+# Admin: update a user's role
+curl -X PATCH http://localhost:3000/v1/users/USER_ID \
+  -H "Authorization: Bearer ADMIN_TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"role":"ADMIN"}'
+```
+
+### Posts
+
+```bash
+# List published posts (pagination, sort, tag filter)
+curl 'http://localhost:3000/v1/posts?page=1&limit=10&sort=createdAt:desc&tagSlug=nestjs'
+
+# Get a single post by slug
+curl http://localhost:3000/v1/posts/welcome-to-the-blog
+
+# Create a post (authenticated)
+curl -X POST http://localhost:3000/v1/posts \
+  -H "Authorization: Bearer TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"My Post","content":"Hello world","published":true,"tagSlugs":["nestjs"]}'
+
+# Update a post (author or admin)
+curl -X PATCH http://localhost:3000/v1/posts/POST_ID \
+  -H "Authorization: Bearer TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"published":true}'
+
+# Delete a post (author or admin)
+curl -X DELETE http://localhost:3000/v1/posts/POST_ID \
+  -H "Authorization: Bearer TOKEN"
+```
+
+### Comments
+
+```bash
+# List comments on a post
+curl http://localhost:3000/v1/posts/POST_ID/comments
+
+# Create a comment (authenticated)
+curl -X POST http://localhost:3000/v1/posts/POST_ID/comments \
+  -H "Authorization: Bearer TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"body":"Great post!"}'
+
+# Delete a comment (author or admin)
+curl -X DELETE http://localhost:3000/v1/comments/COMMENT_ID \
+  -H "Authorization: Bearer TOKEN"
+```
+
+### Tags
+
+```bash
+# List all tags
+curl http://localhost:3000/v1/tags
+```
 
 ### OpenAPI
 
@@ -100,9 +170,45 @@ curl http://localhost:3000/health -H 'X-Request-Id: my-trace-id' -v
 ### Automated checks
 
 ```bash
-npm test           # unit tests (no Postgres required)
-npm run test:e2e   # e2e tests (requires Postgres + blog_test migrations)
+npm test              # unit tests (no Postgres required)
+npm run test:e2e      # e2e tests (requires Postgres + blog_test seed)
+npm run lint:check    # ESLint
+npm run format:check  # Prettier
+npm run build         # TypeScript compile
 ```
+
+CI runs the same checks on every push/PR via [`.github/workflows/ci.yml`](./.github/workflows/ci.yml).
+
+### OpenAPI export (release pinning)
+
+```bash
+# Requires Postgres + running migrations on DATABASE_URL
+npm run openapi:export   # writes openapi.json to repo root
+```
+
+Commit `openapi.json` on release tags so the frontend can pin against a stable contract.
+
+## Deployment
+
+Production boot sequence:
+
+```bash
+npx prisma migrate deploy   # apply pending migrations (forward-only)
+node dist/src/main          # start the API
+```
+
+**Health probes** (for Kubernetes, Railway, Fly.io, etc.):
+
+| Probe     | Path      | Expects                          |
+| --------- | --------- | -------------------------------- |
+| Liveness  | `/health` | `200` with `{ "status": "ok" }`  |
+| Readiness | `/ready`  | `200` when database is reachable |
+
+**Rollback policy:** Prisma has no automatic down migrations. Roll forward with a corrective migration if a deploy fails. Never run `migrate dev` in production — use `migrate deploy` only.
+
+**Branch protection (GitHub):** Enable in repo Settings → Branches → `main`: require pull requests, require status check `quality` (CI workflow), and optionally require linear history.
+
+**Dependency scanning:** [`.github/dependabot.yml`](./.github/dependabot.yml) opens weekly PRs for npm and Docker base image updates. Block merges on critical Dependabot alerts in branch protection or via GitHub security settings.
 
 ## Prisma guide
 
@@ -323,7 +429,7 @@ npm run format         # Prettier (write)
 npm run format:check   # Prettier (check only)
 
 npm run test           # unit tests
-npm run test:e2e       # end-to-end tests
+npm run test:e2e       # migrate test DB, seed, then e2e tests
 npm run test:cov       # unit tests with coverage
 
 npm run db:generate    # regenerate Prisma Client from schema
@@ -331,7 +437,9 @@ npm run db:migrate     # create/apply migrations (dev)
 npm run db:migrate:deploy  # apply migrations only (CI/production)
 npm run db:migrate:test    # apply migrations to blog_test (e2e)
 npm run db:seed            # seed blog_dev with sample data
+npm run db:seed:test       # seed blog_test for e2e runs
 npm run db:studio          # open Prisma Studio
+npm run openapi:export     # export openapi.json snapshot
 ```
 
 ## Git commits

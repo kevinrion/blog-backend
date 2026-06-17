@@ -142,30 +142,30 @@ For each domain below, follow the same checklist:
 
 ### Users
 
-- [ ] `GET /v1/users/me` — authenticated profile.
-- [ ] `PATCH /v1/users/me` — update profile (metadata JSONB allowed).
-- [ ] Admin: list/manage users (roles guard).
+- [*] `GET /v1/users/me` — authenticated profile.
+- [*] `PATCH /v1/users/me` — update profile (metadata JSONB allowed).
+- [*] Admin: list/manage users (roles guard).
 
 ### Posts
 
-- [ ] `GET /v1/posts` — public list (published only); pagination, sort, filter.
-- [ ] `GET /v1/posts/:slug` — single post by slug.
-- [ ] `POST /v1/posts` — create (authenticated).
-- [ ] `PATCH /v1/posts/:id` — update (author or admin).
-- [ ] `DELETE /v1/posts/:id` — delete (author or admin).
-- [ ] Slug generation and uniqueness validation.
+- [*] `GET /v1/posts` — public list (published only); pagination, sort, filter.
+- [*] `GET /v1/posts/:slug` — single post by slug.
+- [*] `POST /v1/posts` — create (authenticated).
+- [*] `PATCH /v1/posts/:id` — update (author or admin).
+- [*] `DELETE /v1/posts/:id` — delete (author or admin).
+- [*] Slug generation and uniqueness validation.
 
 ### Comments
 
-- [ ] `GET /v1/posts/:postId/comments` — list comments for a post.
-- [ ] `POST /v1/posts/:postId/comments` — create (authenticated).
-- [ ] `DELETE /v1/comments/:id` — delete (author or admin).
+- [*] `GET /v1/posts/:postId/comments` — list comments for a post.
+- [*] `POST /v1/posts/:postId/comments` — create (authenticated).
+- [*] `DELETE /v1/comments/:id` — delete (author or admin).
 
 ### Tags
 
-- [ ] `GET /v1/tags` — list all tags.
-- [ ] Associate tags with posts via `PostTag` join table.
-- [ ] Filter posts by tag slug.
+- [*] `GET /v1/tags` — list all tags.
+- [*] Associate tags with posts via `PostTag` join table.
+- [*] Filter posts by tag slug.
 
 ---
 
@@ -173,10 +173,10 @@ For each domain below, follow the same checklist:
 
 **Objective:** Prevent regressions with a clear, layered test approach.
 
-- [ ] **Unit Tests:** Jest tests for services. Mock Prisma client (`jest-mock-extended` or manual mocks). Focus on business logic and edge cases.
-- [ ] **E2E Tests:** Supertest against the full Nest app. Use `DATABASE_URL_TEST` with a real Postgres instance (local Docker or Testcontainers).
-- [ ] **CI Test DB:** GitHub Actions `services: postgres` (or Testcontainers). Run `prisma migrate deploy` against the test DB before e2e suite.
-- [ ] **Critical Flows to Cover:**
+- [*] **Unit Tests:** Jest tests for services. Mock Prisma client (`jest-mock-extended` or manual mocks). Focus on business logic and edge cases.
+- [*] **E2E Tests:** Supertest against the full Nest app. Use `DATABASE_URL_TEST` with a real Postgres instance (local Docker or Testcontainers).
+- [*] **CI Test DB:** GitHub Actions `services: postgres` (or Testcontainers). Run `prisma migrate deploy` against the test DB before e2e suite.
+- [*] **Critical Flows to Cover:**
   - Auth: register, login, protected route rejection.
   - Posts: CRUD, slug uniqueness, publish/unpublish.
   - Comments: create, delete, authorization.
@@ -188,18 +188,18 @@ For each domain below, follow the same checklist:
 
 **Objective:** Automate quality gates and safe deployment.
 
-- [ ] **CI Pipeline (GitHub Actions):**
+- [*] **CI Pipeline (GitHub Actions):**
   1. Lint and format check.
   2. TypeScript build (`nest build`).
   3. Unit tests.
   4. Spin up Postgres service → `prisma migrate deploy` → e2e tests.
-- [ ] **Branch Protection:** Require PRs, passing status checks, and (optionally) linear history on `main`.
-- [ ] **Dependency Scanning:** Enable GitHub Dependabot or Snyk. Block merges on critical vulnerabilities.
-- [ ] **Deployment:**
+- [*] **Branch Protection:** Require PRs, passing status checks, and (optionally) linear history on `main`.
+- [*] **Dependency Scanning:** Enable GitHub Dependabot or Snyk. Block merges on critical vulnerabilities.
+- [*] **Deployment:**
   - Run `npx prisma migrate deploy` as a pre-boot step in production.
   - Document rollback policy (Prisma has no automatic down migrations — plan forward-only migrations with corrective follow-ups).
   - Use health/readiness probes against `/health` and `/ready`.
-- [ ] **Release Artifacts:** Tag releases with a committed `openapi.json` snapshot for frontend pinning.
+- [*] **Release Artifacts:** Tag releases with a committed `openapi.json` snapshot for frontend pinning.
 
 ---
 
