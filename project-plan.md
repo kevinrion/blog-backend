@@ -69,10 +69,10 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
 
 **Objective:** Implement global infrastructure that every feature module depends on — before writing business features.
 
-- [ ] **Config Validation:** Use `@nestjs/config` with Zod (or Joi) to validate all env vars at boot. Crash immediately if required values (`DATABASE_URL`, `JWT_SECRET`, etc.) are missing or malformed.
-- [ ] **Logger Integration:** Replace the default NestJS logger with **Pino** (`nestjs-pino`). All stdout must be structured JSON. Never log passwords, tokens, or other PII.
-- [ ] **Correlation ID Middleware:** Assign a `correlationId` (or propagate `X-Request-Id` from the client) on every inbound request. Include it in logs and error responses.
-- [ ] **Global Exception Filter:** Catch raw database/system errors, log them internally with the correlation ID, and return a sanitized uniform JSON envelope:
+- [*] **Config Validation:** Use `@nestjs/config` with Zod (or Joi) to validate all env vars at boot. Crash immediately if required values (`DATABASE_URL`, `JWT_SECRET`, etc.) are missing or malformed.
+- [*] **Logger Integration:** Replace the default NestJS logger with **Pino** (`nestjs-pino`). All stdout must be structured JSON. Never log passwords, tokens, or other PII.
+- [*] **Correlation ID Middleware:** Assign a `correlationId` (or propagate `X-Request-Id` from the client) on every inbound request. Include it in logs and error responses.
+- [*] **Global Exception Filter:** Catch raw database/system errors, log them internally with the correlation ID, and return a sanitized uniform JSON envelope:
 
   ```json
   {
@@ -85,17 +85,17 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
 
   Never leak stack traces, SQL errors, or internal paths to the client.
 
-- [ ] **Validation Pipe:** Enable the global `ValidationPipe` with `class-validator` and `class-transformer`. Strip unknown properties (`whitelist: true`) and reject non-whitelisted fields (`forbidNonWhitelisted: true`).
-- [ ] **Security Middleware:**
+- [*] **Validation Pipe:** Enable the global `ValidationPipe` with `class-validator` and `class-transformer`. Strip unknown properties (`whitelist: true`) and reject non-whitelisted fields (`forbidNonWhitelisted: true`).
+- [*] **Security Middleware:**
   - `helmet` for HTTP security headers.
   - `@nestjs/throttler` for rate limiting on auth and write endpoints.
   - Request body size limits.
-- [ ] **CORS:** Configure allowed origins from `CORS_ORIGIN` env var (e.g. `http://localhost:5173` for the Vite frontend). Backend owns CORS — the frontend repo cannot configure this.
-- [ ] **Health Endpoints:**
+- [*] **CORS:** Configure allowed origins from `CORS_ORIGIN` env var (e.g. `http://localhost:5173` for the Vite frontend). Backend owns CORS — the frontend repo cannot configure this.
+- [*] **Health Endpoints:**
   - `GET /health` — liveness (app is running).
   - `GET /ready` — readiness (app can reach the database).
-- [ ] **API Versioning & Prefix:** Mount all routes under `/v1` (from `API_PREFIX`). Version in the URL path, not headers.
-- [ ] **OpenAPI / Swagger:** Integrate `@nestjs/swagger`. Auto-generate spec from decorators. Expose at `GET /v1/docs` and raw JSON at `GET /v1/docs-json`. This is the **integration contract** for the separate frontend repo.
+- [*] **API Versioning & Prefix:** Mount all routes under `/v1` (from `API_PREFIX`). Version in the URL path, not headers.
+- [*] **OpenAPI / Swagger:** Integrate `@nestjs/swagger`. Auto-generate spec from decorators. Expose at `GET /v1/docs` and raw JSON at `GET /v1/docs-json`. This is the **integration contract** for the separate frontend repo.
 
 ---
 
