@@ -54,3 +54,5 @@ docker-compose.override.yml
 .eslintcache
 .cache/
 .turbo/
+
+/generated/prisma

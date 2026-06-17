@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(USER)
+  metadata     Json     @default("{}")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  posts    Post[]
+  comments Comment[]
+}
+
+model Post {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String
+  slug      String   @unique
+  content   String
+  published Boolean  @default(false)
+  authorId  String   @db.Uuid
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments Comment[]
+  tags     PostTag[]
+
+  @@index([published])
+}
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  body      String
+  postId    String   @db.Uuid
+  authorId  String   @db.Uuid
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
+  slug String @unique
+
+  posts PostTag[]
+}
+
+model PostTag {
+  postId String @db.Uuid
+  tagId  String @db.Uuid
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+}

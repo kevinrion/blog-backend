@@ -1,0 +1,17 @@
+node_modules
+dist
+coverage
+.git
+.husky
+.env
+.env.*
+!.env.example
+*.md
+test
+docker-compose.yml
+docker-compose.override.yml
+npm-debug.log*
+.eslintcache
+.cache
+.turbo
+*.tsbuildinfo

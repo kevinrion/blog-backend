@@ -41,10 +41,10 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
 
 > **Note:** "Hybrid database" means PostgreSQL with structured relational columns plus flexible `JSONB` columns — not multiple database engines.
 
-- [ ] **Local Infrastructure:** Create `docker-compose.yml` to spin up a local PostgreSQL instance (pinned image version) so every developer runs the same database.
-- [ ] **App Containerization:** Add a multi-stage `Dockerfile` for the NestJS app. Multi-stage builds keep production images small and exclude build-time tooling from the final image.
-- [ ] **Prisma Setup:** Initialize Prisma (`npx prisma init`) and point it to the local Docker database via `DATABASE_URL`.
-- [ ] **Schema Definition:** Implement the initial `schema.prisma` models:
+- [*] **Local Infrastructure:** Create `docker-compose.yml` to spin up a local PostgreSQL instance (pinned image version) so every developer runs the same database.
+- [*] **App Containerization:** Add a multi-stage `Dockerfile` for the NestJS app. Multi-stage builds keep production images small and exclude build-time tooling from the final image.
+- [*] **Prisma Setup:** Initialize Prisma (`npx prisma init`) and point it to the local Docker database via `DATABASE_URL`.
+- [*] **Schema Definition:** Implement the initial `schema.prisma` models:
   - UUID v4 primary keys on all tables (prevents ID enumeration).
   - `Json` type (`JSONB` in PostgreSQL) for flexible `metadata` columns where appropriate.
   - Core entities (initial scope):
@@ -59,9 +59,9 @@ Standalone NestJS API repository. The frontend lives in a separate repo and cons
 
   - Define relations (`User` → `Post`, `Post` → `Comment`, `Post` ↔ `Tag`) and indexes (`email`, `slug`, `published`).
 
-- [ ] **First Migration:** Run `npx prisma migrate dev --name init` and verify it applies cleanly.
-- [ ] **Seed Script:** Add `prisma/seed.ts` for local dev data (admin user, sample posts, tags). Wire via `package.json` `prisma.seed`.
-- [ ] **Test Database Strategy:** Document separate `DATABASE_URL_TEST` for e2e tests. CI and local e2e runs target the test database, never dev data.
+- [*] **First Migration:** Run `npx prisma migrate dev --name init` and verify it applies cleanly.
+- [*] **Seed Script:** Add `prisma/seed.ts` for local dev data (admin user, sample posts, tags). Wire via `package.json` `prisma.seed`.
+- [*] **Test Database Strategy:** Document separate `DATABASE_URL_TEST` for e2e tests. CI and local e2e runs target the test database, never dev data.
 
 ---
 
