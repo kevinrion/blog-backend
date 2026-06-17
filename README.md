@@ -2,6 +2,11 @@
 
 Portfolio project — backend API for a blog site. Built with [NestJS](https://nestjs.com/) and TypeScript. The frontend lives in a separate repo and consumes this service via a documented HTTP contract (OpenAPI).
 
+DISCLAIMER:
+Ai assisted with minimal review. Created a plan before coding was started, but this project is less about the code, its mainly to see how well ai performed with minimal input from me. Its more about the learning experience of planning and using agentic coding, than the actual code for this repo. Testing effectiveness of the plan basically.
+
+There will be more projects coming soon where I will take a much greater hands-on approach to reviewing the implemented code.
+
 See [project-plan.md](./project-plan.md) for the full roadmap.
 
 ## Prerequisites
